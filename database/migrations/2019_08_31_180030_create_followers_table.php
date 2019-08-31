@@ -15,6 +15,10 @@ class CreateFollowersTable extends Migration
     {
         Schema::create('followers', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->unsignedBigInteger('follower_id');
+            $table->foreign('follower_id')->references('id')->on('users');
             $table->timestamps();
         });
     }
@@ -26,6 +30,13 @@ class CreateFollowersTable extends Migration
      */
     public function down()
     {
+
+        Schema::table('followers', function (Blueprint $table) {
+            $table->dropForeign(['user_id']); // drop the foreign key.
+            $table->dropColumn('user_id'); // drop the column
+            $table->dropForeign(['follower_id']); // drop the foreign key.
+            $table->dropColumn('follower_id'); // drop the column
+        });
         Schema::dropIfExists('followers');
     }
 }

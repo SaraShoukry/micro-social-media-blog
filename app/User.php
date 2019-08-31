@@ -42,6 +42,25 @@ class User extends Authenticatable
     ];
 
     /**
+     * Get the tweets for the user.
+     */
+    public function tweets()
+    {
+        return $this->hasMany('App\Tweet');
+    }
+
+
+    /**
+     * Get the followers for the user.
+     */
+    public function followers()
+    {
+        return $this->hasMany('App\Follower');
+    }
+
+
+
+    /**
      * get profile picture
      * @return mixed
      */
