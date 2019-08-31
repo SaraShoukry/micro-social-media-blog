@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Tweet;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
@@ -61,9 +62,16 @@ class UserController extends Controller
         $request->user()->token()->revoke();
         return response()->json([
             'message' => 'Successfully logged out'
-        ]);
+        ], $this->successStatus);
     }
 
+    public function timeLine(){
+        $user = Auth::user();
+        $tweets = $user->timeline();
+        return response()->json([
+            'tweets'=> $tweets
+        ]);
+    }
     /**
      * details api
      *

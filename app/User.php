@@ -53,9 +53,24 @@ class User extends Authenticatable
     /**
      * Get the followers for the user.
      */
+    /**
+     * Get the followers for the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function followers()
     {
-        return $this->hasMany('App\Follower');
+        return $this->belongsToMany(User::class, 'followers', 'user_id', 'follower_id');
+    }
+
+    /**
+     * Get the users followed by this user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function following()
+    {
+        return $this->belongsToMany(User::class, 'followers', 'follower_id', 'user_id');
     }
 
     /**
@@ -65,7 +80,8 @@ class User extends Authenticatable
      * @return mixed
      */
 
-    public function register($data){
+    public function register($data)
+    {
         //upload image
         $profileImage = $data['profile_picture'];
         $profileImageSaveAsName = time() . "-profile." . $profileImage->getClientOriginalExtension();
@@ -88,8 +104,16 @@ class User extends Authenticatable
      * @return bool
      */
 
-    public function setAPIToken($api_token){
+    public function setAPIToken($api_token)
+    {
         $this->api_token = $api_token;
         return $this->save();
+    }
+
+    public function timeline()
+    {
+        $followers_ids = $this->followers()->pluck('follower_id')->toArray();
+        $tweets = Tweet::whereIn('user_id', $followers_ids)->orderBy('updated_at', 'desc')->paginate();
+        return $tweets;
     }
 }
