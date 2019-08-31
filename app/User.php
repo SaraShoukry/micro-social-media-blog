@@ -56,7 +56,7 @@ class User extends Authenticatable
         $this->uploadOne($profileImage, $upload_path, 'public', $profileImageSaveAsName);
 
 
-        $input['password'] = bcrypt($data['password']);
+        $data['password'] = bcrypt($data['password']);
         $user = User::create($data);
         $success['token'] = $user->createToken('MyApp')->accessToken;
         $user->api_token = $success['token'];

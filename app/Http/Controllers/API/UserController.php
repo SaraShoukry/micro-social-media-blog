@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Requests\Register;
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
 use App\Traits\UploadTrait;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
-use Illuminate\Support\Facades\Auth;
+use Auth;
+use Hash;
 use Validator;
 
 class UserController extends Controller
@@ -20,9 +22,11 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function login()
+    public function login(LoginRequest $request)
     {
-        if (Auth::attempt(['email' => request('email'), 'password' => request('password')])) {
+        $user = User::where('email', request('email'))->first();
+        if(Auth::attempt(['email' => request('email'), 'password' => request('password')])){
+//            if (Hash::check(request('password'), $user->password)) {
             $user = Auth::user();
             $success['token'] = $user->createToken('MyApp')->accessToken;
             $user->setAPIToken($success['token']);
@@ -33,24 +37,12 @@ class UserController extends Controller
     }
 
     /**
-     * Register api
+     * RegisterRequest api
      *
      * @return \Illuminate\Http\Response
      */
-    public function register(Request $request)
+    public function register(RegisterRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'email' => 'required|email|unique:users',
-            'password' => 'required',
-            'c_password' => 'required|same:password',
-            'profile_picture' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 401);
-        }
-
         $input = $request->all();
         $user = new User();
         $user = $user->register($input);
@@ -61,10 +53,11 @@ class UserController extends Controller
 
     public function logout(Request $request)
     {
-        if (Auth::check()) {
-            $request->user()->token()->delete();
-        }
-        return response()->json(['message' => 'User logged out .'], 200);
+
+        $request->user()->token()->revoke();
+        return response()->json([
+            'message' => 'Successfully logged out'
+        ]);
     }
 
     /**
@@ -72,8 +65,10 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function details()
+    public function details(Request $request)
     {
+        return response()->json($request->user());
+
         $user = Auth::user();
         return response()->json(['success' => $user], $this->successStatus);
     }

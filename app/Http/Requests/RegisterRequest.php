@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class Register extends FormRequest
+class RegisterRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -29,6 +29,19 @@ class Register extends FormRequest
             'password' => 'required',
             'c_password' => 'required|same:password',
             'profile_picture'     =>  'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ];
+    }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'c_password.required' => 'The password confirm field is required.',
+            'c_password.same'  => 'The password confirm and password must match.',
         ];
     }
 }
