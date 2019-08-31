@@ -4,7 +4,6 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
-use App\Traits\UploadTrait;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
@@ -25,8 +24,7 @@ class UserController extends Controller
     public function login(LoginRequest $request)
     {
         $user = User::where('email', request('email'))->first();
-        if(Auth::attempt(['email' => request('email'), 'password' => request('password')])){
-//            if (Hash::check(request('password'), $user->password)) {
+        if (Auth::attempt(['email' => request('email'), 'password' => request('password')])) {
             $user = Auth::user();
             $success['token'] = $user->createToken('MyApp')->accessToken;
             $user->setAPIToken($success['token']);
@@ -51,6 +49,12 @@ class UserController extends Controller
         return response()->json(['success' => $success], $this->successStatus);
     }
 
+    /**
+     * logout api
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function logout(Request $request)
     {
 

@@ -41,30 +41,43 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function getImageAttribute()
+    /**
+     * get profile picture
+     * @return mixed
+     */
+    public function getProfilePictureAttribute()
     {
-        return $this->profile_image;
+        return $this->profile_picture;
     }
 
+    /**
+     * register
+     *
+     * @param $data
+     * @return mixed
+     */
     public function register($data){
-
+        //upload image
         $profileImage = $data['profile_picture'];
         $profileImageSaveAsName = time() . "-profile." . $profileImage->getClientOriginalExtension();
         $upload_path = 'profile_images/';
         $profile_image_url = $upload_path . $profileImageSaveAsName;
-//        $profileImage->move($upload_path, $profileImageSaveAsName);
         $this->uploadOne($profileImage, $upload_path, 'public', $profileImageSaveAsName);
 
-
+        $data['profile_picture'] = $profile_image_url;
         $data['password'] = bcrypt($data['password']);
         $user = User::create($data);
         $success['token'] = $user->createToken('MyApp')->accessToken;
+
         $user->api_token = $success['token'];
-        $user->profile_picture = $profile_image_url;
         $user->save();
         return $user;
     }
 
+    /**
+     * @param $api_token
+     * @return bool
+     */
     public function setAPIToken($api_token){
         $this->api_token = $api_token;
         return $this->save();
