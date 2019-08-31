@@ -113,7 +113,7 @@ class User extends Authenticatable
     public function timeline()
     {
         $followers_ids = $this->followers()->pluck('follower_id')->toArray();
-        $tweets = Tweet::whereIn('user_id', $followers_ids)->paginate();
+        $tweets = Tweet::whereIn('user_id', $followers_ids)->orderBy('updated_at', 'desc')->paginate();
         return $tweets;
     }
 }
