@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Tweet;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
@@ -64,6 +65,13 @@ class UserController extends Controller
         ]);
     }
 
+    public function timeLine(){
+        $user = Auth::user();
+        $followers_ids = $user->followers()->pluck('follower_id')->toArray();
+        $tweets = Tweet::whereIn('user_id',$followers_ids )->paginate();
+        return $tweets;
+
+    }
     /**
      * details api
      *

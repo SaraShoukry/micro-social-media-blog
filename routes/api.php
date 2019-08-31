@@ -16,6 +16,7 @@ Route::post('login', 'API\UserController@login');
 Route::post('register', 'API\UserController@register');
 Route::group(['middleware' => 'auth:api'], function () {
     Route::post('logout', 'API\UserController@logout');
+    Route::get('/', 'API\UserController@timeLine');
     Route::post('details', 'API\UserController@details');
 });
 Route::group(['middleware' => 'auth:api', 'prefix'=>'tweet'], function () {
