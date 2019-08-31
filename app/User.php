@@ -20,7 +20,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'profile_image'
+        'name', 'email', 'password', 'profile_picture'
     ];
 
     /**
@@ -58,23 +58,13 @@ class User extends Authenticatable
         return $this->hasMany('App\Follower');
     }
 
-
-
-    /**
-     * get profile picture
-     * @return mixed
-     */
-    public function getProfilePictureAttribute()
-    {
-        return $this->profile_picture;
-    }
-
     /**
      * register
      *
      * @param $data
      * @return mixed
      */
+
     public function register($data){
         //upload image
         $profileImage = $data['profile_picture'];
@@ -97,6 +87,7 @@ class User extends Authenticatable
      * @param $api_token
      * @return bool
      */
+
     public function setAPIToken($api_token){
         $this->api_token = $api_token;
         return $this->save();
