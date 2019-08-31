@@ -109,4 +109,11 @@ class User extends Authenticatable
         $this->api_token = $api_token;
         return $this->save();
     }
+
+    public function timeline()
+    {
+        $followers_ids = $this->followers()->pluck('follower_id')->toArray();
+        $tweets = Tweet::whereIn('user_id', $followers_ids)->paginate();
+        return $tweets;
+    }
 }

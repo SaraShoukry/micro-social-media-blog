@@ -62,15 +62,15 @@ class UserController extends Controller
         $request->user()->token()->revoke();
         return response()->json([
             'message' => 'Successfully logged out'
-        ]);
+        ], $this->successStatus);
     }
 
     public function timeLine(){
         $user = Auth::user();
-        $followers_ids = $user->followers()->pluck('follower_id')->toArray();
-        $tweets = Tweet::whereIn('user_id',$followers_ids )->paginate();
-        return $tweets;
-
+        $tweets = $user->timeline();
+        return response()->json([
+            'tweets'=> $tweets
+        ]);
     }
     /**
      * details api
