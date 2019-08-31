@@ -83,11 +83,11 @@ class User extends Authenticatable
     public function register($data)
     {
         //upload image
-        $profileImage = $data['profile_picture'];
-        $profileImageSaveAsName = time() . "-profile." . $profileImage->getClientOriginalExtension();
+        $profile_image = $data['profile_picture'];
+        $profile_image_save_as_name = time() . "-profile." . $profile_image->getClientOriginalExtension();
         $upload_path = 'profile_images/';
-        $profile_image_url = $upload_path . $profileImageSaveAsName;
-        $this->uploadOne($profileImage, $upload_path, 'public', $profileImageSaveAsName);
+        $profile_image_url = $upload_path . $profile_image_save_as_name;
+        $this->uploadOne($profile_image, $upload_path, 'public', $profile_image_save_as_name);
 
         $data['profile_picture'] = $profile_image_url;
         $data['password'] = bcrypt($data['password']);
