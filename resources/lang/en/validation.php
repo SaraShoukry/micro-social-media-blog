@@ -129,6 +129,13 @@ return [
     */
 
     'custom' => [
+        'follower_id' => [
+            'not_in' => 'You can\'t follow yourself.'
+        ],
+        'c_password' => [
+            'required' => 'The password confirm field is required.',
+            'same' => 'The password confirm and password must match.',
+        ],
         'attribute-name' => [
             'rule-name' => 'custom-message',
         ],
