@@ -31,17 +31,4 @@ class RegisterRequest extends FormRequest
             'profile_picture'     =>  'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ];
     }
-
-    /**
-     * Get the error messages for the defined validation rules.
-     *
-     * @return array
-     */
-    public function messages()
-    {
-        return [
-            'c_password.required' => 'The password confirm field is required.',
-            'c_password.same'  => 'The password confirm and password must match.',
-        ];
-    }
 }

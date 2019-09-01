@@ -29,17 +29,4 @@ class FollowRequest extends FormRequest
                 '|unique:followers,follower_id,' . Auth::user()->id,
         ];
     }
-
-
-    /**
-     * Get the error messages for the defined validation rules.
-     *
-     * @return array
-     */
-    public function messages()
-    {
-        return [
-            'follower_id.not_in' => 'You can\'t follow yourself.',
-        ];
-    }
 }
