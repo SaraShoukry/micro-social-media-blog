@@ -3,6 +3,6 @@
 <p>- For localization, I used <a href="https://github.com/caouecs/Laravel-lang/blob/master/src/ar/validation.php">caouecs/Laravel-lang</a> and I added my enhancements to cooperate with this project.</p>
 
 
-## Important commang to use Passport
+## Important command to use Passport
 <p>1. php artisan migrate</p>
 <p>2. php artisan passport:install</p>
