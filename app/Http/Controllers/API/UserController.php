@@ -65,13 +65,13 @@ class UserController extends Controller
         ], $this->successStatus);
     }
 
-    public function timeLine(){
-        $user = Auth::user();
-        $tweets = $user->timeline();
+    public function timeLine()
+    {
         return response()->json([
-            'tweets'=> $tweets
-        ]);
+            'tweets' => Auth::user()->timeline()
+        ], 200);
     }
+
     /**
      * details api
      *
