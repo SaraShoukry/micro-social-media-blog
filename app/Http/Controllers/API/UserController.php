@@ -4,7 +4,6 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
-use App\Tweet;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
@@ -14,8 +13,6 @@ use Validator;
 
 class UserController extends Controller
 {
-
-    public $successStatus = 200;
 
     /**
      * login api
@@ -29,7 +26,7 @@ class UserController extends Controller
             $user = Auth::user();
             $success['token'] = $user->createToken('MyApp')->accessToken;
             $user->setAPIToken($success['token']);
-            return response()->json(['success' => $success], $this->successStatus);
+            return response()->json(['success' => $success], 200);
         } else {
             return response()->json(['error' => 'Unauthorised'], 401);
         }
@@ -47,7 +44,7 @@ class UserController extends Controller
         $user = $user->register($input);
         $success['name'] = $user->name;
         $success['token'] = $user->api_token;
-        return response()->json(['success' => $success], $this->successStatus);
+        return response()->json(['success' => $success], 201);
     }
 
     /**
@@ -58,18 +55,22 @@ class UserController extends Controller
      */
     public function logout(Request $request)
     {
-
         $request->user()->token()->revoke();
         return response()->json([
             'message' => 'Successfully logged out'
-        ], $this->successStatus);
+        ], 204);
     }
 
+    /**
+     * auth user timeline
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function timeLine()
     {
         return response()->json([
             'tweets' => Auth::user()->timeline()
-        ], 200);
+        ], 206);
     }
 
     /**
@@ -80,7 +81,6 @@ class UserController extends Controller
     public function details()
     {
         $user = Auth::user();
-        return response()->json(['success' => $user], $this->successStatus);
+        return response()->json(['success' => $user], 200);
     }
-
 }

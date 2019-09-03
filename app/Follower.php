@@ -8,6 +8,7 @@ class Follower extends Model
 {
     protected $table = 'followers';
 
+
     public static function follow($data){
         $follow =new Follower();
         $follow->user_id = Auth::user()->id;

@@ -2,13 +2,9 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Requests\LoginRequest;
-use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\TweetRequest;
 use App\Tweet;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\User;
 use Auth;
 use Hash;
 use Validator;
@@ -16,15 +12,25 @@ use Validator;
 class TweetController extends Controller
 {
 
-    public $successStatus = 200;
-
+    /**
+     * user create tweet
+     *
+     * @param TweetRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function init(TweetRequest $request)
     {
         $input = $request->all();
         $success = Tweet::initTweet($input);
-        return response()->json(['success' => $success], $this->successStatus);
+        return response()->json(['success' => $success], 201);
     }
 
+    /**
+     * user delete tweet
+     *
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function delete($id)
     {
         $tweet = Tweet::findOrFail($id);
