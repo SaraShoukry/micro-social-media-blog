@@ -26,7 +26,7 @@ class RegisterRequest extends FormRequest
         return [
             'name' => 'required',
             'email' => 'required|email|unique:users',
-            'password' => 'required|min:6|max:12',
+            'password' => 'required|min:6|max:12|regex:/^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9]).*$/',//regex must contain at least one character , one special character , one number
             'c_password' => 'required|same:password|min:6|max:12',
             'profile_picture'     =>  'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ];
